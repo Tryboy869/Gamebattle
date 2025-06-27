@@ -400,22 +400,22 @@
         <div class="battle-section">
             <h2 class="battle-title">⚔️ Mobile Titans Clash</h2>
             <div class="battle-arena">
-                <div class="game-card" onclick="vote('ff-pubg', 'ff', 'up')">
+                <div class="game-card" onclick="handleVoteClick('ff-pubg', 'ff', 'up')">
                     <div class="game-image ff-bg"></div>
                     <div class="game-name">Free Fire</div>
                     <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('ff-pubg', 'ff', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('ff-pubg', 'ff', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
+                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); handleVoteClick('ff-pubg', 'ff', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
+                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); handleVoteClick('ff-pubg', 'ff', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
                     </div>
                     <div class="vote-count" id="ff-score">0</div>
                 </div>
                 <div class="vs-divider">VS</div>
-                <div class="game-card" onclick="vote('ff-pubg', 'pubg', 'up')">
+                <div class="game-card" onclick="handleVoteClick('ff-pubg', 'pubg', 'up')">
                     <div class="game-image pubg-bg"></div>
                     <div class="game-name">PUBG Mobile</div>
                     <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('ff-pubg', 'pubg', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('ff-pubg', 'pubg', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
+                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); handleVoteClick('ff-pubg', 'pubg', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
+                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); handleVoteClick('ff-pubg', 'pubg', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
                     </div>
                     <div class="vote-count" id="pubg-score">0</div>
                 </div>
@@ -425,22 +425,22 @@
         <div class="battle-section">
             <h2 class="battle-title">🔥 Cross-Platform Showdown</h2>
             <div class="battle-arena">
-                <div class="game-card" onclick="vote('pubg-cod', 'pubg2', 'up')">
+                <div class="game-card" onclick="handleVoteClick('pubg-cod', 'pubg2', 'up')">
                     <div class="game-image pubg-bg"></div>
                     <div class="game-name">PUBG</div>
                     <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('pubg-cod', 'pubg2', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('pubg-cod', 'pubg2', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
+                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); handleVoteClick('pubg-cod', 'pubg2', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
+                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); handleVoteClick('pubg-cod', 'pubg2', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
                     </div>
                     <div class="vote-count" id="pubg2-score">0</div>
                 </div>
                 <div class="vs-divider">VS</div>
-                <div class="game-card" onclick="vote('pubg-cod', 'cod', 'up')">
+                <div class="game-card" onclick="handleVoteClick('pubg-cod', 'cod', 'up')">
                     <div class="game-image cod-bg"></div>
                     <div class="game-name">Call of Duty</div>
                     <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('pubg-cod', 'cod', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('pubg-cod', 'cod', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
+                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); handleVoteClick('pubg-cod', 'cod', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
+                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); handleVoteClick('pubg-cod', 'cod', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
                     </div>
                     <div class="vote-count" id="cod-score">0</div>
                 </div>
@@ -450,22 +450,22 @@
         <div class="battle-section">
             <h2 class="battle-title">💥 Speed vs Intensity</h2>
             <div class="battle-arena">
-                <div class="game-card" onclick="vote('ff-cod', 'ff2', 'up')">
+                <div class="game-card" onclick="handleVoteClick('ff-cod', 'ff2', 'up')">
                     <div class="game-image ff-bg"></div>
                     <div class="game-name">Free Fire</div>
                     <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('ff-cod', 'ff2', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('ff-cod', 'ff2', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
+                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); handleVoteClick('ff-cod', 'ff2', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
+                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); handleVoteClick('ff-cod', 'ff2', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
                     </div>
                     <div class="vote-count" id="ff2-score">0</div>
                 </div>
                 <div class="vs-divider">VS</div>
-                <div class="game-card" onclick="vote('ff-cod', 'cod2', 'up')">
+                <div class="game-card" onclick="handleVoteClick('ff-cod', 'cod2', 'up')">
                     <div class="game-image cod-bg"></div>
                     <div class="game-name">Call of Duty</div>
                     <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('ff-cod', 'cod2', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('ff-cod', 'cod2', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
+                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); handleVoteClick('ff-cod', 'cod2', 'up')"><i class="fa-solid fa-thumbs-up"></i> J'ADORE</button>
+                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); handleVoteClick('ff-cod', 'cod2', 'down')"><i class="fa-solid fa-thumbs-down"></i> PAS FAN</button>
                     </div>
                     <div class="vote-count" id="cod2-score">0</div>
                 </div>
@@ -498,40 +498,33 @@
         let battleStats = JSON.parse(localStorage.getItem('battleStats')) || {
             'ff-pubg': 0, 'pubg-cod': 0, 'ff-cod': 0
         };
-        let userVotes = JSON.parse(localStorage.getItem('userVotes')) || {}; // Tracks user's vote per battle
+        // userVotes stockera le vote de l'utilisateur pour chaque bataille.
+        // Exemple : userVotes = {'ff-pubg': 'ff_up', 'pubg-cod': 'cod_down'}
+        let userVotes = JSON.parse(localStorage.getItem('userVotes')) || {};
 
-        function vote(battle, game, type) {
-            const previousVoteGame = userVotes[battle]; // Get the game previously voted for in this battle
+        function handleVoteClick(battleId, gameId, voteType) {
+            const currentVoteKey = `${gameId}_${voteType}`; // ex: 'ff_up'
+            const previousVoteKey = userVotes[battleId]; // ex: 'ff_up' ou 'pubg_down'
 
-            // If the user already voted in this battle, revert the previous vote
-            if (previousVoteGame) {
-                if (gameScores[previousVoteGame] !== undefined) {
-                    gameScores[previousVoteGame] -= 1; // Decrement score of previously voted game
+            // Case 1: User tries to vote for the same option again
+            if (previousVoteKey === currentVoteKey) {
+                // Do nothing, already voted this way
+                console.log(`Already voted ${voteType} for ${gameId} in ${battleId}. Ignoring.`);
+                return;
+            }
+
+            // Case 2: User changes their vote in the same battle
+            if (previousVoteKey) {
+                // Undo the previous vote
+                const [prevGameId, prevVoteType] = previousVoteKey.split('_');
+                if (prevVoteType === 'up') {
+                    gameScores[prevGameId] -= 1;
+                } else { // 'down'
+                    gameScores[prevGameId] += 1; // Correctly revert downvote
                 }
-                if (battleStats[battle] > 0) { // Ensure battleStats doesn't go negative if only one vote was cast
-                    battleStats[battle] -= 1; // Decrement battle count for this specific battle
-                }
+                battleStats[battleId] -= 1; // Decrement previous vote count for this battle
             }
 
             // Apply the new vote
-            if (type === 'up') {
-                gameScores[game] += 1;
-            } else { // 'down' vote, though your current buttons only do 'up' logic. Added for completeness.
-                gameScores[game] -= 1;
-            }
-            battleStats[battle] += 1; // Increment battle count for this specific battle
-
-            // Update user's vote for this battle
-            userVotes[battle] = game;
-
-            // Save to localStorage
-            localStorage.setItem('gameScores', JSON.stringify(gameScores));
-            localStorage.setItem('battleStats', JSON.stringify(battleStats));
-            localStorage.setItem('userVotes', JSON.stringify(userVotes));
-
-            updateScores();
-            updateStats();
-            animateVote(game);
-        }
-
-    
+            if (voteType === 'up') {
+                gameScores[
