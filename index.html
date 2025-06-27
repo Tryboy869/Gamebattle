@@ -1,427 +1,97 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameBattle - Qui est le meilleur ?</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+<script>
+    let gameScores = JSON.parse(localStorage.getItem('gameScores')) || {
+        'ff': 0,
+        'pubg': 0,
+        'pubg2': 0,
+        'cod': 0,
+        'ff2': 0,
+        'cod2': 0
+    };
+
+    let battleStats = JSON.parse(localStorage.getItem('battleStats')) || {
+        'ff-pubg': 0,
+        'pubg-cod': 0,
+        'ff-cod': 0
+    };
+
+    let userVotes = JSON.parse(localStorage.getItem('userVotes')) || {}; // { "ff-pubg": "ff" }
+
+    function vote(battle, game, type) {
+        // Vérifie si l'utilisateur a déjà voté pour cette battle
+        const previousVote = userVotes[battle];
+
+        // Annule l'ancien vote si l'utilisateur change d'avis
+        if (previousVote && previousVote !== game) {
+            gameScores[previousVote] -= 1;
+            battleStats[battle] -= 1;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: white;
+        // Si c’est un nouveau vote ou un changement
+        userVotes[battle] = game;
+
+        // Applique le nouveau vote
+        if (type === 'up') {
+            gameScores[game] += 1;
+        } else {
+            gameScores[game] -= 1;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        battleStats[battle] += 1;
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 20px 0;
-        }
+        // Enregistre dans localStorage
+        localStorage.setItem('gameScores', JSON.stringify(gameScores));
+        localStorage.setItem('battleStats', JSON.stringify(battleStats));
+        localStorage.setItem('userVotes', JSON.stringify(userVotes));
 
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .battle-section {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .battle-title {
-            text-align: center;
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            color: #FFD700;
-        }
-
-        .battle-arena {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .game-card {
-            flex: 1;
-            min-width: 300px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            cursor: pointer;
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-            border-color: #FFD700;
-            box-shadow: 0 10px 30px rgba(255,215,0,0.3);
-        }
-
-        .game-image {
-            width: 100%;
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ff-bg { background-image: url('./images/free-fire.webp'); }
-        
-        .pubg-bg { background-image: url('./images/pubg.webp'); }
-        
-        .cod-bg { background-image: url('./images/call-of-duty.webp'); }
-
-        .game-name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .vote-section {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .vote-btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .upvote-btn {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            color: white;
-        }
-
-        .downvote-btn {
-            background: linear-gradient(45deg, #f44336, #da190b);
-            color: white;
-        }
-
-        .vote-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .vote-count {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #FFD700;
-        }
-
-        .vs-divider {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            font-weight: bold;
-            color: #FFD700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .stats-section {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-top: 40px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .stats-title {
-            text-align: center;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #FFD700;
-        }
-
-        .global-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-card {
-            background: rgba(255,255,255,0.05);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .battle-arena {
-                flex-direction: column;
-            }
-            
-            .vs-divider {
-                transform: rotate(90deg);
-                margin: 20px 0;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🎮 GameBattle</h1>
-            <p>Qui dominera le Battle Royale ? Votez pour votre jeu préféré !</p>
-        </div>
-
-        <!-- Free Fire vs PUBG -->
-        <div class="battle-section">
-            <h2 class="battle-title">⚔️ Mobile Battle Royale Clash</h2>
-            <div class="battle-arena">
-                <div class="game-card" onclick="vote('ff-pubg', 'ff', 'up')">
-                    <div class="game-image ff-bg"></div>
-                    <div class="game-name">Free Fire</div>
-                    <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('ff-pubg', 'ff', 'up')">
-                            👍 J'adore
-                        </button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('ff-pubg', 'ff', 'down')">
-                            👎 Pas fan
-                        </button>
-                    </div>
-                    <div class="vote-count" id="ff-score">0</div>
-                </div>
-
-                <div class="vs-divider">VS</div>
-
-                <div class="game-card" onclick="vote('ff-pubg', 'pubg', 'up')">
-                    <div class="game-image pubg-bg"></div>
-                    <div class="game-name">PUBG Mobile</div>
-                    <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('ff-pubg', 'pubg', 'up')">
-                            👍 J'adore
-                        </button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('ff-pubg', 'pubg', 'down')">
-                            👎 Pas fan
-                        </button>
-                    </div>
-                    <div class="vote-count" id="pubg-score">0</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PUBG vs COD -->
-        <div class="battle-section">
-            <h2 class="battle-title">🔥 Cross-Platform Showdown</h2>
-            <div class="battle-arena">
-                <div class="game-card" onclick="vote('pubg-cod', 'pubg2', 'up')">
-                    <div class="game-image pubg-bg"></div>
-                    <div class="game-name">PUBG</div>
-                    <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('pubg-cod', 'pubg2', 'up')">
-                            👍 J'adore
-                        </button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('pubg-cod', 'pubg2', 'down')">
-                            👎 Pas fan
-                        </button>
-                    </div>
-                    <div class="vote-count" id="pubg2-score">0</div>
-                </div>
-
-                <div class="vs-divider">VS</div>
-
-                <div class="game-card" onclick="vote('pubg-cod', 'cod', 'up')">
-                    <div class="game-image cod-bg"></div>
-                    <div class="game-name">Call of Duty</div>
-                    <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('pubg-cod', 'cod', 'up')">
-                            👍 J'adore
-                        </button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('pubg-cod', 'cod', 'down')">
-                            👎 Pas fan
-                        </button>
-                    </div>
-                    <div class="vote-count" id="cod-score">0</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Free Fire vs COD -->
-        <div class="battle-section">
-            <h2 class="battle-title">💥 Speed vs Intensity</h2>
-            <div class="battle-arena">
-                <div class="game-card" onclick="vote('ff-cod', 'ff2', 'up')">
-                    <div class="game-image ff-bg"></div>
-                    <div class="game-name">Free Fire</div>
-                    <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('ff-cod', 'ff2', 'up')">
-                            👍 J'adore
-                        </button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('ff-cod', 'ff2', 'down')">
-                            👎 Pas fan
-                        </button>
-                    </div>
-                    <div class="vote-count" id="ff2-score">0</div>
-                </div>
-
-                <div class="vs-divider">VS</div>
-
-                <div class="game-card" onclick="vote('ff-cod', 'cod2', 'up')">
-                    <div class="game-image cod-bg"></div>
-                    <div class="game-name">Call of Duty</div>
-                    <div class="vote-section">
-                        <button class="vote-btn upvote-btn" onclick="event.stopPropagation(); vote('ff-cod', 'cod2', 'up')">
-                            👍 J'adore
-                        </button>
-                        <button class="vote-btn downvote-btn" onclick="event.stopPropagation(); vote('ff-cod', 'cod2', 'down')">
-                            👎 Pas fan
-                        </button>
-                    </div>
-                    <div class="vote-count" id="cod2-score">0</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stats Section -->
-        <div class="stats-section">
-            <h2 class="stats-title">📊 Statistiques Globales</h2>
-            <div class="global-stats">
-                <div class="stat-card">
-                    <h3>Total Votes</h3>
-                    <div class="vote-count" id="total-votes">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Jeu le Plus Voté</h3>
-                    <div id="top-game">Aucun vote encore</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Battle le Plus Actif</h3>
-                    <div id="active-battle">En attente...</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Initialisation des scores
-        let gameScores = {
-            'ff': 0,
-            'pubg': 0,
-            'pubg2': 0,
-            'cod': 0,
-            'ff2': 0,
-            'cod2': 0
-        };
-
-        let battleStats = {
-            'ff-pubg': 0,
-            'pubg-cod': 0,
-            'ff-cod': 0
-        };
-
-        // Fonction de vote
-        function vote(battle, game, type) {
-            if (type === 'up') {
-                gameScores[game] += 1;
-            } else {
-                gameScores[game] -= 1;
-            }
-            
-            battleStats[battle] += 1;
-            
-            // Mise à jour des affichages
-            updateScores();
-            updateStats();
-            
-            // Animation de feedback
-            animateVote(game, type);
-        }
-
-        function updateScores() {
-            Object.keys(gameScores).forEach(game => {
-                const element = document.getElementById(game + '-score');
-                if (element) {
-                    element.textContent = gameScores[game];
-                    element.style.color = gameScores[game] > 0 ? '#4CAF50' : gameScores[game] < 0 ? '#f44336' : '#FFD700';
-                }
-            });
-        }
-
-        function updateStats() {
-            // Total des votes
-            const totalVotes = Object.values(battleStats).reduce((a, b) => a + b, 0);
-            document.getElementById('total-votes').textContent = totalVotes;
-            
-            // Jeu le plus voté
-            const topGame = Object.keys(gameScores).reduce((a, b) => gameScores[a] > gameScores[b] ? a : b);
-            const gameNames = {
-                'ff': 'Free Fire',
-                'ff2': 'Free Fire', 
-                'pubg': 'PUBG',
-                'pubg2': 'PUBG',
-                'cod': 'Call of Duty',
-                'cod2': 'Call of Duty'
-            };
-            document.getElementById('top-game').textContent = totalVotes > 0 ? gameNames[topGame] : 'Aucun vote encore';
-            
-            // Battle le plus actif
-            const activeBattle = Object.keys(battleStats).reduce((a, b) => battleStats[a] > battleStats[b] ? a : b);
-            const battleNames = {
-                'ff-pubg': 'Free Fire vs PUBG',
-                'pubg-cod': 'PUBG vs Call of Duty',
-                'ff-cod': 'Free Fire vs Call of Duty'
-            };
-            document.getElementById('active-battle').textContent = totalVotes > 0 ? battleNames[activeBattle] : 'En attente...';
-        }
-
-        function animateVote(game, type) {
-            const scoreElement = document.getElementById(game + '-score');
-            scoreElement.style.transform = 'scale(1.3)';
-            scoreElement.style.transition = 'transform 0.3s ease';
-            
-            setTimeout(() => {
-                scoreElement.style.transform = 'scale(1)';
-            }, 300);
-        }
-
-        // Initialisation
         updateScores();
         updateStats();
-    </script>
-</body>
-</html>
+        animateVote(game, type);
+    }
+
+    function updateScores() {
+        Object.keys(gameScores).forEach(game => {
+            const element = document.getElementById(game + '-score');
+            if (element) {
+                element.textContent = gameScores[game];
+                element.style.color =
+                    gameScores[game] > 0 ? '#4CAF50' :
+                    gameScores[game] < 0 ? '#f44336' :
+                    '#FFD700';
+            }
+        });
+    }
+
+    function updateStats() {
+        const totalVotes = Object.values(battleStats).reduce((a, b) => a + b, 0);
+        document.getElementById('total-votes').textContent = totalVotes;
+
+        const topGame = Object.keys(gameScores).reduce((a, b) => gameScores[a] > gameScores[b] ? a : b);
+        const gameNames = {
+            'ff': 'Free Fire', 'ff2': 'Free Fire',
+            'pubg': 'PUBG', 'pubg2': 'PUBG',
+            'cod': 'Call of Duty', 'cod2': 'Call of Duty'
+        };
+        document.getElementById('top-game').textContent = totalVotes > 0 ? gameNames[topGame] : 'Aucun vote encore';
+
+        const activeBattle = Object.keys(battleStats).reduce((a, b) => battleStats[a] > battleStats[b] ? a : b);
+        const battleNames = {
+            'ff-pubg': 'Free Fire vs PUBG',
+            'pubg-cod': 'PUBG vs Call of Duty',
+            'ff-cod': 'Free Fire vs Call of Duty'
+        };
+        document.getElementById('active-battle').textContent = totalVotes > 0 ? battleNames[activeBattle] : 'En attente...';
+    }
+
+    function animateVote(game, type) {
+        const scoreElement = document.getElementById(game + '-score');
+        scoreElement.style.transform = 'scale(1.3)';
+        scoreElement.style.transition = 'transform 0.3s ease';
+        setTimeout(() => {
+            scoreElement.style.transform = 'scale(1)';
+        }, 300);
+    }
+
+    // Au chargement
+    updateScores();
+    updateStats();
+</script>
